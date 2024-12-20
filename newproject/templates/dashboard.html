@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <style>
+        .password-item {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Dashboard</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>Manage Your Passwords</h2>
+
+            <!-- Add Password Form -->
+            <form method="POST" action="{% url 'add_password' %}">
+                {% csrf_token %}
+                <label for="website">Website/Social Media:</label>
+                <input type="text" id="website" name="website" required placeholder="Enter website/social media name">
+
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required placeholder="Enter username">
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required placeholder="Enter password">
+
+                <button type="submit">Add Password</button>
+            </form>
+
+            <!-- Display Saved Passwords -->
+            <div id="password-list" class="password-list">
+                <h2>Saved Passwords</h2>
+                {% for entry in saved_passwords %}
+                    <div class="password-item">
+                        <strong>Website:</strong> {{ entry.website }}<br>
+                        <strong>Username:</strong> {{ entry.username }}<br>
+                        <strong>Password:</strong> 
+                        <span class="masked-password">{{ entry.password|slice:":4" }}****</span> 
+                        <!-- Hidden password span -->
+                        <button onclick="togglePassword(this, '{{ entry.password }}')">Show</button> <!-- Pass full password to function -->
+                    </div>
+                {% empty %}
+                    <p>No saved passwords found.</p>
+                {% endfor %}
+            </div>
+
+            <!-- JavaScript to toggle password visibility -->
+            <script>
+                function togglePassword(button, fullPassword) {
+                    const passwordItem = button.parentElement.querySelector('.masked-password');
+                    
+                    if (button.textContent === "Show") {
+                        passwordItem.textContent = fullPassword; // Show full password
+                        button.textContent = "Hide"; // Change button text
+                    } else {
+                        passwordItem.textContent = passwordItem.textContent.slice(0, -fullPassword.length) + "****"; // Mask again
+                        button.textContent = "Show"; // Change button text back
+                    }
+                }
+            </script>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Your Website. All rights reserved.</p>
+    </footer>
+</body>
+</html>

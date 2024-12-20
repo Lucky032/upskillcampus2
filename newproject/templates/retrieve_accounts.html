@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrieve My Accounts</title>
+    <link rel="stylesheet" href="{% static 'retrive_accounts.css' %}"> <!-- Add your custom styles if needed -->
+</head>
+<body>
+    <h1>Retrieve My Accounts</h1>
+    
+    <!-- Displaying the retrieved passwords -->
+    {% if saved_passwords %}
+        <h2>Your Stored Social Media Accounts</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Website</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in saved_passwords %}
+                    <tr>
+                        <td>{{ entry.website }}</td>
+                        <td>{{ entry.username }}</td>
+                        <td>{{ entry.password }}</td> <!-- Optionally hash passwords -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No accounts found.</p>
+    {% endif %}
+    <li><a href="{% url 'logout' %}">Dashboard</a></li>
+</body>
+</html>

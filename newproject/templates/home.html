@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Home Page</h1>
+    </header>
+    <nav>
+        <ul>
+            {% if is_authenticated %}
+                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li><a href="{% url 'retrieve_accounts' %}">Retrieve My Accounts</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+                <p>Welcome, <strong>{{ username }}</strong>!</p>
+            {% else %}
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'registration' %}">Registration</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <p>Please log in to access more features.</p>
+            {% endif %}
+        </ul>
+    </nav>
+    <main>
+        <section>
+            <h2>About Us</h2>
+            <p>We provide amazing services to our users. Feel free to explore our platform.</p>
+        </section>
+        <section>
+            <h2>Features</h2>
+            <ul>
+                <li>Feature 1 - Manage your accounts securely.</li>
+                <li>Feature 2 - Retrieve saved credentials anytime.</li>
+                <li>Feature 3 - Simple and intuitive dashboard.</li>
+            </ul>
+            <a href="{% url 'registration' %}" class="button">Get Started</a>
+        </section>
+    </main>
+    {% if messages %}
+        <div class="messages">
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <footer>
+        <p>&copy; 2024 Your Website. All rights reserved.</p>
+    </footer>
+</body>
+</html>
